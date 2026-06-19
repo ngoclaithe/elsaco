@@ -15,6 +15,7 @@ npm install
 
 echo "=== 4. Prisma migrate + seed ==="
 cd backend
+npx prisma generate
 npx prisma migrate deploy
 npm run prisma:seed
 npm run build
