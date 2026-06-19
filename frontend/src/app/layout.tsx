@@ -3,6 +3,7 @@ import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
+import { CartRouteSync } from '@/components/cart/CartRouteSync';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import { StoreOnly } from '@/components/layout/StoreOnly';
 
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="vi">
       <body className="min-h-screen flex flex-col">
         <AuthProvider>
+          <CartRouteSync />
           <StoreOnly>
             <Header />
           </StoreOnly>

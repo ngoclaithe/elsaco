@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { authApi } from '@/lib/api';
+import { useCartStore } from '@/stores/cart.store';
 import type { RegisterInput, User } from '@/lib/types';
 
 interface AuthStore {
@@ -29,6 +30,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     try {
       const { user } = await authApi.login(email, password);
       set({ user, isLoading: false });
+      await useCartStore.getState().fetchCart();
       return user;
     } catch (e) {
       set({ isLoading: false });
@@ -41,6 +43,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     try {
       const { user } = await authApi.register(data);
       set({ user, isLoading: false });
+      await useCartStore.getState().fetchCart();
       return user;
     } catch (e) {
       set({ isLoading: false });
@@ -53,6 +56,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       await authApi.logout();
     } finally {
       set({ user: null });
+      useCartStore.getState().clearItems();
     }
   },
 
