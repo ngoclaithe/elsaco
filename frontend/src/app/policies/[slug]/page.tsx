@@ -35,11 +35,12 @@ Sale items and accessories are final sale unless defective.`,
   },
   contact: {
     title: 'Contact Information',
-    content: `HỘ KINH DOANH elSaco
-MST: 079096007477 do Chi cục Thuế cấp ngày 25/05/2026
-ĐC: C38, Ấp 50, Xuân Thới Sơn, Thành phố Hồ Chí Minh, Việt Nam
-Hotline: 0938328604
-Email: contact@elsaco.com`,
+    content: `CÔNG TY TNHH THƯƠNG MẠI & DỊCH VỤ DOSU
+Đối tác công nghệ tin cậy, xây dựng giải pháp toàn diện từ ý tưởng đến sản phẩm hoàn thiện.
+
+Số 03, Ngách 72/59 Đường Tây Mỗ, Phường Tây Mỗ, TP Hà Nội
+0346 437 915 (Lại Thế Ngọc)
+support@dosutech.site`,
   },
 };
 

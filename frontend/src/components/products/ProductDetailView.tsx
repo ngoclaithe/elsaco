@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { ProductImage } from './ProductImage';
 import { formatPrice, isOnSale } from '@/lib/utils/format';
 import type { Product } from '@/lib/types';
 
@@ -31,10 +32,9 @@ export function ProductDetailView({
     <div className="grid lg:grid-cols-2 gap-8 lg:gap-16">
       <div>
         <div className="relative aspect-[3/4] bg-neutral-100 overflow-hidden mb-4">
-          <Image
+          <ProductImage
             src={product.images[activeImage] || product.images[0]}
             alt={product.name}
-            fill
             priority
             className="object-cover"
           />
@@ -54,7 +54,7 @@ export function ProductDetailView({
                   activeImage === i ? 'border-black' : 'border-transparent'
                 }`}
               >
-                <Image src={img} alt="" fill className="object-cover" />
+                <ProductImage src={img} alt="" className="object-cover" />
               </button>
             ))}
           </div>

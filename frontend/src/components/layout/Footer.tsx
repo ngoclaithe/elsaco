@@ -2,71 +2,54 @@ import Link from 'next/link';
 
 export function Footer() {
   return (
-    <footer className="border-t border-neutral-200 mt-auto store-footer">
-      <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          <div>
-            <h3 className="text-sm font-semibold tracking-widest uppercase mb-4">
-              elSaco
-            </h3>
-            <p className="text-sm text-muted leading-relaxed">
-              Streetwear fashion brand. Bold designs, premium quality.
-            </p>
-          </div>
+    <footer className="mt-auto border-t border-neutral-200">
+      <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-10 text-center">
+        <p className="text-sm">© 2026 elSaco</p>
 
-          <div>
-            <h4 className="text-xs font-medium uppercase tracking-wider text-muted mb-4">
-              Terms and Policies
-            </h4>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/policies/privacy" className="text-sm link-underline">
-                  Privacy policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/policies/shipping" className="text-sm link-underline">
-                  Shipping policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/policies/refund" className="text-sm link-underline">
-                  Refund policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/policies/contact" className="text-sm link-underline">
-                  Contact information
-                </Link>
-              </li>
-            </ul>
-          </div>
+        <nav className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
+          <Link href="/policies/privacy" className="hover:underline">
+            Privacy policy
+          </Link>
+          <Link href="/policies/shipping" className="hover:underline">
+            Shipping policy
+          </Link>
+          <Link href="/policies/refund" className="hover:underline">
+            Refund policy
+          </Link>
+          <Link href="/policies/contact" className="hover:underline">
+            Contact information
+          </Link>
+        </nav>
 
-          <div>
-            <h4 className="text-xs font-medium uppercase tracking-wider text-muted mb-4">
-              Follow us
-            </h4>
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm link-underline"
-            >
-              Instagram
-            </a>
-          </div>
-        </div>
+        <a
+          href="https://instagram.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block mt-4 text-sm hover:underline"
+        >
+          Instagram
+        </a>
+      </div>
 
-        <div className="border-t border-neutral-200 pt-8">
-          <p className="text-xs text-muted text-center mb-4">
-            © 2026 elSaco, Powered by elSaco
+      <div className="border-t border-neutral-200 bg-neutral-50">
+        <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-8 text-center text-xs text-muted leading-relaxed space-y-1">
+          <p className="font-medium text-foreground">
+            CÔNG TY TNHH THƯƠNG MẠI &amp; DỊCH VỤ DOSU
           </p>
-          <div className="text-xs text-muted text-center leading-relaxed">
-            <p>HỘ KINH DOANH elSaco</p>
-            <p>MST: 079096007477 do Chi cục Thuế cấp ngày 25/05/2026</p>
-            <p>ĐC: C38, Ấp 50, Xuân Thới Sơn, Thành phố Hồ Chí Minh, Việt Nam</p>
-            <p>Hotline: 0938328604</p>
-          </div>
+          <p>
+            Đối tác công nghệ tin cậy, xây dựng giải pháp toàn diện từ ý tưởng đến sản phẩm hoàn thiện.
+          </p>
+          <p>Số 03, Ngách 72/59 Đường Tây Mỗ, Phường Tây Mỗ, TP Hà Nội</p>
+          <p>
+            <a href="tel:0346437915" className="hover:underline">
+              0346 437 915 (Lại Thế Ngọc)
+            </a>
+          </p>
+          <p>
+            <a href="mailto:support@dosutech.site" className="hover:underline">
+              support@dosutech.site
+            </a>
+          </p>
         </div>
       </div>
     </footer>

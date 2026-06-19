@@ -13,25 +13,25 @@ export default async function HomePage() {
 
   return (
     <>
-      <section className="relative w-full h-[70vh] min-h-[500px] bg-neutral-900 overflow-hidden">
+      <section className="relative w-full aspect-[4/5] sm:aspect-[16/10] lg:aspect-[21/9] max-h-[90vh] bg-neutral-900">
         <Image
-          src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80"
-          alt="elSaco Hero"
+          src="https://picsum.photos/seed/elsaco-hero/1920/1080"
+          alt="elSaco"
           fill
           priority
-          className="object-cover opacity-80"
+          className="object-cover"
+          sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        <div className="absolute inset-0 flex items-end justify-center pb-16 lg:pb-24">
-          <Link href="/shop" className="btn-primary">
+        <div className="absolute inset-0 flex items-end justify-center pb-12 sm:pb-16">
+          <Link href="/shop" className="btn-primary min-w-[220px] text-center">
             Shop now
           </Link>
         </div>
       </section>
 
       {featured.length > 0 && (
-        <section className="max-w-[1400px] mx-auto px-4 lg:px-8 py-16 lg:py-24">
-          <ProductGrid products={featured} />
+        <section className="w-full pt-0">
+          <ProductGrid products={featured} tight />
         </section>
       )}
     </>
