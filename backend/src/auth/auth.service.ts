@@ -14,6 +14,8 @@ import {
   clearPortalAuthCookies,
   REFRESH_COOKIE,
   PORTAL_REFRESH_COOKIE,
+  getPortalAccessSecret,
+  getPortalRefreshSecret,
 } from './auth-cookie.util';
 
 @Injectable()
@@ -259,17 +261,11 @@ export class AuthService {
   }
 
   private getPortalAccessSecret() {
-    return (
-      this.config.get<string>('PORTAL_JWT_SECRET') ||
-      `${this.getAccessSecret()}-portal`
-    );
+    return getPortalAccessSecret(this.config);
   }
 
   private getPortalRefreshSecret() {
-    return (
-      this.config.get<string>('PORTAL_JWT_REFRESH_SECRET') ||
-      `${this.getRefreshSecret()}-portal`
-    );
+    return getPortalRefreshSecret(this.config);
   }
 
   private getAccessSecret() {

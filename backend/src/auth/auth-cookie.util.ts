@@ -6,6 +6,20 @@ export const REFRESH_COOKIE = 'elsaco_refresh';
 export const PORTAL_ACCESS_COOKIE = 'elsaco_portal_access';
 export const PORTAL_REFRESH_COOKIE = 'elsaco_portal_refresh';
 
+export function getPortalAccessSecret(config: ConfigService): string {
+  return (
+    config.get<string>('PORTAL_JWT_SECRET') ||
+    `${config.get<string>('JWT_SECRET') || 'elsaco-access-secret'}-portal`
+  );
+}
+
+export function getPortalRefreshSecret(config: ConfigService): string {
+  return (
+    config.get<string>('PORTAL_JWT_REFRESH_SECRET') ||
+    `${config.get<string>('JWT_REFRESH_SECRET') || 'elsaco-refresh-secret'}-portal`
+  );
+}
+
 export function getCookieOptions(config: ConfigService, maxAgeMs: number) {
   const isProd = config.get('NODE_ENV') === 'production';
   const domain = config.get<string>('COOKIE_DOMAIN') || undefined;

@@ -3,7 +3,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
-import { PORTAL_ACCESS_COOKIE } from './auth-cookie.util';
+import {
+  PORTAL_ACCESS_COOKIE,
+  getPortalAccessSecret,
+} from './auth-cookie.util';
 
 @Injectable()
 export class PortalJwtStrategy extends PassportStrategy(Strategy, 'portal-jwt') {
@@ -13,10 +16,7 @@ export class PortalJwtStrategy extends PassportStrategy(Strategy, 'portal-jwt') 
         (req: Request) => req?.cookies?.[PORTAL_ACCESS_COOKIE] ?? null,
       ]),
       ignoreExpiration: false,
-      secretOrKey:
-        config.get<string>('PORTAL_JWT_SECRET') ||
-        config.get<string>('JWT_SECRET') ||
-        'elsaco-portal-access-secret',
+      secretOrKey: getPortalAccessSecret(config),
     });
   }
 

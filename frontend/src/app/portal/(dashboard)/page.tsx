@@ -7,7 +7,16 @@ import { formatPrice, ORDER_STATUS_LABELS } from '@/lib/utils/format';
 export default function PortalDashboardPage() {
   const { stats } = useAdminDashboard();
 
-  if (!stats) return <div className="text-muted">Loading dashboard...</div>;
+  if (!stats) {
+    return (
+      <div className="text-muted">
+        <p>Failed to load dashboard.</p>
+        <button onClick={() => window.location.reload()} className="text-sm underline mt-2">
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   const cards = [
     { label: 'Products', value: stats.totalProducts, href: '/portal/products' },
