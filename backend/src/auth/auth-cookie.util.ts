@@ -3,6 +3,8 @@ import { ConfigService } from '@nestjs/config';
 
 export const ACCESS_COOKIE = 'elsaco_access';
 export const REFRESH_COOKIE = 'elsaco_refresh';
+export const PORTAL_ACCESS_COOKIE = 'elsaco_portal_access';
+export const PORTAL_REFRESH_COOKIE = 'elsaco_portal_refresh';
 
 export function getCookieOptions(config: ConfigService, maxAgeMs: number) {
   const isProd = config.get('NODE_ENV') === 'production';
@@ -35,6 +37,25 @@ export function clearAuthCookies(res: Response, config: ConfigService) {
   const opts = { ...getCookieOptions(config, 0), maxAge: 0 };
   res.clearCookie(ACCESS_COOKIE, opts);
   res.clearCookie(REFRESH_COOKIE, opts);
+}
+
+export function setPortalAuthCookies(
+  res: Response,
+  config: ConfigService,
+  accessToken: string,
+  refreshToken: string,
+) {
+  const accessMax = parseExpiry(config.get('JWT_EXPIRES_IN') || '15m');
+  const refreshMax = parseExpiry(config.get('JWT_REFRESH_EXPIRES_IN') || '7d');
+
+  res.cookie(PORTAL_ACCESS_COOKIE, accessToken, getCookieOptions(config, accessMax));
+  res.cookie(PORTAL_REFRESH_COOKIE, refreshToken, getCookieOptions(config, refreshMax));
+}
+
+export function clearPortalAuthCookies(res: Response, config: ConfigService) {
+  const opts = { ...getCookieOptions(config, 0), maxAge: 0 };
+  res.clearCookie(PORTAL_ACCESS_COOKIE, opts);
+  res.clearCookie(PORTAL_REFRESH_COOKIE, opts);
 }
 
 function parseExpiry(value: string): number {

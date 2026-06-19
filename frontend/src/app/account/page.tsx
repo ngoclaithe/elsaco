@@ -30,13 +30,6 @@ export default function AccountPage() {
         <button onClick={logout} className="text-sm underline hover:no-underline">Log out</button>
       </div>
 
-      {user.role === 'ADMIN' && (
-        <Link href="/admin" className="block border border-black p-4 mb-4 hover:bg-black hover:text-white transition-colors">
-          <p className="font-medium">Admin Portal</p>
-          <p className="text-sm opacity-70">Manage products, orders, and users</p>
-        </Link>
-      )}
-
       <div className="space-y-4">
         {links.map((link) => (
           <Link key={link.href} href={link.href} className="block border border-neutral-200 p-6 hover:border-black transition-colors group">

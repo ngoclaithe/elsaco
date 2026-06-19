@@ -20,6 +20,16 @@ const nextConfig = {
         destination: '/collections/:category',
         permanent: true,
       },
+      {
+        source: '/admin',
+        destination: '/portal',
+        permanent: true,
+      },
+      {
+        source: '/admin/:path*',
+        destination: '/portal/:path*',
+        permanent: true,
+      },
     ];
   },
   async rewrites() {

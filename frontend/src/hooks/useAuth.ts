@@ -26,18 +26,6 @@ export function useAuth() {
     [user, isInitialized, router],
   );
 
-  const requireAdmin = useCallback(
-    (redirectTo = '/admin') => {
-      if (!requireAuth(redirectTo)) return false;
-      if (user?.role !== 'ADMIN') {
-        router.push('/');
-        return false;
-      }
-      return true;
-    },
-    [user, requireAuth, router],
-  );
-
   const handleLogout = useCallback(async () => {
     await logout();
     router.push('/');
@@ -48,13 +36,11 @@ export function useAuth() {
     isLoading,
     isInitialized,
     isAuthenticated: !!user,
-    isAdmin: user?.role === 'ADMIN',
     login,
     register,
     logout: handleLogout,
     fetchProfile,
     requireAuth,
-    requireAdmin,
   };
 }
 

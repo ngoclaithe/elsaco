@@ -3,7 +3,7 @@
 import { useAdminOrders } from '@/hooks/useAdmin';
 import { formatPrice, ORDER_STATUS_LABELS, ORDER_STATUS_OPTIONS } from '@/lib/utils/format';
 
-export default function AdminOrdersPage() {
+export default function PortalOrdersPage() {
   const { orders, loading, expanded, setExpanded, updateStatus } = useAdminOrders();
 
   return (
@@ -17,15 +17,29 @@ export default function AdminOrdersPage() {
         <div className="space-y-4">
           {orders.map((order) => (
             <div key={order.id} className="bg-white border">
-              <button onClick={() => setExpanded(expanded === order.id ? null : order.id)} className="w-full p-4 lg:px-6 flex justify-between text-left hover:bg-neutral-50">
+              <button
+                onClick={() => setExpanded(expanded === order.id ? null : order.id)}
+                className="w-full p-4 lg:px-6 flex justify-between text-left hover:bg-neutral-50"
+              >
                 <div>
                   <p className="font-medium">#{order.orderNumber}</p>
-                  <p className="text-xs text-muted">{order.user?.name} · {new Date(order.createdAt).toLocaleDateString('vi-VN')}</p>
+                  <p className="text-xs text-muted">
+                    {order.user?.name} · {new Date(order.createdAt).toLocaleDateString('vi-VN')}
+                  </p>
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="text-sm font-medium">{formatPrice(order.total)}</span>
-                  <select value={order.status} onClick={(e) => e.stopPropagation()} onChange={(e) => updateStatus(order.id, e.target.value)} className="text-xs border px-2 py-1">
-                    {ORDER_STATUS_OPTIONS.map((s) => <option key={s} value={s}>{ORDER_STATUS_LABELS[s]}</option>)}
+                  <select
+                    value={order.status}
+                    onClick={(e) => e.stopPropagation()}
+                    onChange={(e) => updateStatus(order.id, e.target.value)}
+                    className="text-xs border px-2 py-1"
+                  >
+                    {ORDER_STATUS_OPTIONS.map((s) => (
+                      <option key={s} value={s}>
+                        {ORDER_STATUS_LABELS[s]}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </button>
@@ -33,7 +47,9 @@ export default function AdminOrdersPage() {
                 <div className="border-t p-4 lg:px-6 space-y-3">
                   {order.items.map((item) => (
                     <div key={item.id} className="flex justify-between text-sm">
-                      <span>{item.productName} — {item.size} × {item.quantity}</span>
+                      <span>
+                        {item.productName} — {item.size} × {item.quantity}
+                      </span>
                       <span>{formatPrice(item.price * item.quantity)}</span>
                     </div>
                   ))}

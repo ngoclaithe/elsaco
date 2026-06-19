@@ -1,4 +1,4 @@
-import { apiFetch } from './client';
+import { portalApiFetch } from './portal-client';
 import type {
   AdminUser,
   DashboardStats,
@@ -8,32 +8,32 @@ import type {
 } from '@/lib/types';
 
 export const adminApi = {
-  getDashboard: () => apiFetch<DashboardStats>('/admin/dashboard'),
+  getDashboard: () => portalApiFetch<DashboardStats>('/admin/dashboard'),
 
-  getProducts: () => apiFetch<Product[]>('/admin/products'),
+  getProducts: () => portalApiFetch<Product[]>('/admin/products'),
 
   createProduct: (data: ProductFormInput) =>
-    apiFetch<Product>('/admin/products', {
+    portalApiFetch<Product>('/admin/products', {
       method: 'POST',
       body: JSON.stringify(data),
     }),
 
   updateProduct: (id: string, data: Partial<ProductFormInput>) =>
-    apiFetch<Product>(`/admin/products/${id}`, {
+    portalApiFetch<Product>(`/admin/products/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(data),
     }),
 
   deleteProduct: (id: string) =>
-    apiFetch<{ success: boolean }>(`/admin/products/${id}`, { method: 'DELETE' }),
+    portalApiFetch<{ success: boolean }>(`/admin/products/${id}`, { method: 'DELETE' }),
 
-  getOrders: () => apiFetch<Order[]>('/admin/orders'),
+  getOrders: () => portalApiFetch<Order[]>('/admin/orders'),
 
   updateOrderStatus: (id: string, status: string) =>
-    apiFetch<Order>(`/admin/orders/${id}/status`, {
+    portalApiFetch<Order>(`/admin/orders/${id}/status`, {
       method: 'PATCH',
       body: JSON.stringify({ status }),
     }),
 
-  getUsers: () => apiFetch<AdminUser[]>('/admin/users'),
+  getUsers: () => portalApiFetch<AdminUser[]>('/admin/users'),
 };

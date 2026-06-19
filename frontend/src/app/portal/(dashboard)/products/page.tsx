@@ -1,13 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import { useAdminProducts } from '@/hooks/useAdmin';
 import { formatPrice, isOnSale } from '@/lib/utils/format';
 import { ProductFormModal } from '@/components/admin/ProductFormModal';
 import type { ProductFormInput } from '@/lib/types';
 
-export default function AdminProductsPage() {
+export default function PortalProductsPage() {
   const admin = useAdminProducts();
 
   const handleSave = async (data: ProductFormInput) => {
@@ -18,7 +17,9 @@ export default function AdminProductsPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-medium">Products</h1>
-        <button onClick={admin.openCreate} className="btn-primary !py-2 !px-6">Add product</button>
+        <button onClick={admin.openCreate} className="btn-primary !py-2 !px-6">
+          Add product
+        </button>
       </div>
 
       {admin.loading ? (
@@ -45,7 +46,9 @@ export default function AdminProductsPage() {
                       </div>
                       <div>
                         <p className="font-medium line-clamp-1 max-w-[200px]">{product.name}</p>
-                        {isOnSale(product) && <span className="text-2xs text-sale uppercase">Sale</span>}
+                        {isOnSale(product) && (
+                          <span className="text-2xs text-sale uppercase">Sale</span>
+                        )}
                       </div>
                     </div>
                   </td>
@@ -54,8 +57,18 @@ export default function AdminProductsPage() {
                   <td className="p-4">{product.stock}</td>
                   <td className="p-4">
                     <div className="flex gap-3">
-                      <button onClick={() => admin.openEdit(product)} className="text-sm underline">Edit</button>
-                      <button onClick={() => admin.deleteProduct(product.id)} className="text-sm text-sale underline">Delete</button>
+                      <button
+                        onClick={() => admin.openEdit(product)}
+                        className="text-sm underline"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => admin.deleteProduct(product.id)}
+                        className="text-sm text-sale underline"
+                      >
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>

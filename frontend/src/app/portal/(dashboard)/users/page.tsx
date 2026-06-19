@@ -2,7 +2,7 @@
 
 import { useAdminUsers } from '@/hooks/useAdmin';
 
-export default function AdminUsersPage() {
+export default function PortalUsersPage() {
   const { users, loading } = useAdminUsers();
 
   return (
@@ -30,10 +30,18 @@ export default function AdminUsersPage() {
                   <td className="p-4 text-muted">{user.email}</td>
                   <td className="p-4 text-muted">{user.phone || '—'}</td>
                   <td className="p-4">
-                    <span className={`text-xs uppercase px-2 py-1 ${user.role === 'ADMIN' ? 'bg-black text-white' : 'bg-neutral-100'}`}>{user.role}</span>
+                    <span
+                      className={`text-xs uppercase px-2 py-1 ${
+                        user.role === 'ADMIN' ? 'bg-black text-white' : 'bg-neutral-100'
+                      }`}
+                    >
+                      {user.role}
+                    </span>
                   </td>
                   <td className="p-4">{user._count.orders}</td>
-                  <td className="p-4 text-muted">{new Date(user.createdAt).toLocaleDateString('vi-VN')}</td>
+                  <td className="p-4 text-muted">
+                    {new Date(user.createdAt).toLocaleDateString('vi-VN')}
+                  </td>
                 </tr>
               ))}
             </tbody>

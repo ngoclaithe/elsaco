@@ -10,6 +10,8 @@ const backendEnv = `# Auto-generated — run: node scripts/generate-env.js
 DATABASE_URL="postgresql://postgres:test1234@localhost:5432/elsaco?schema=public"
 JWT_SECRET="${secret()}"
 JWT_REFRESH_SECRET="${secret()}"
+PORTAL_JWT_SECRET="${secret()}"
+PORTAL_JWT_REFRESH_SECRET="${secret()}"
 JWT_EXPIRES_IN="15m"
 JWT_REFRESH_EXPIRES_IN="7d"
 PORT=4021
@@ -22,6 +24,8 @@ const backendEnvProd = `# Production — copy to VPS backend/.env and adjust if 
 DATABASE_URL="postgresql://postgres:test1234@localhost:5432/elsaco?schema=public"
 JWT_SECRET="${secret()}"
 JWT_REFRESH_SECRET="${secret()}"
+PORTAL_JWT_SECRET="${secret()}"
+PORTAL_JWT_REFRESH_SECRET="${secret()}"
 JWT_EXPIRES_IN="15m"
 JWT_REFRESH_EXPIRES_IN="7d"
 PORT=4021

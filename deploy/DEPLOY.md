@@ -46,7 +46,7 @@ sudo nginx -t && sudo systemctl reload nginx
 
 ## Demo accounts
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@elsaco.com | admin123 |
-| User | user@elsaco.com | user123 |
+| Role | Login URL | Email | Password |
+|------|-----------|-------|----------|
+| Admin | `/portal/login` | admin@elsaco.com | admin123 |
+| User | `/account/login` | user@elsaco.com | user123 |

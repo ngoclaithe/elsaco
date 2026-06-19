@@ -31,7 +31,7 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  if (pathname.startsWith('/admin')) return null;
+  if (pathname.startsWith('/portal')) return null;
 
   return (
     <>

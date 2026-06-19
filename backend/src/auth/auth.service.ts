@@ -1,12 +1,20 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ForbiddenException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import * as bcrypt from 'bcryptjs';
+import { Role } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { setAuthCookies, clearAuthCookies } from './auth-cookie.util';
+import {
+  setAuthCookies,
+  clearAuthCookies,
+  setPortalAuthCookies,
+  clearPortalAuthCookies,
+  REFRESH_COOKIE,
+  PORTAL_REFRESH_COOKIE,
+} from './auth-cookie.util';
 
 @Injectable()
 export class AuthService {
@@ -53,6 +61,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    if (user.role === Role.ADMIN) {
+      throw new ForbiddenException('Admin accounts must sign in at /portal/login');
+    }
+
     this.issueTokens(res, user.id, user.email, user.role);
     return {
       user: {
@@ -63,6 +75,71 @@ export class AuthService {
         phone: user.phone,
       },
     };
+  }
+
+  async portalLogin(dto: LoginDto, res: Response) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const valid = await bcrypt.compare(dto.password, user.password);
+    if (!valid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    if (user.role !== Role.ADMIN) {
+      throw new ForbiddenException('Portal access is restricted to administrators');
+    }
+
+    this.issuePortalTokens(res, user.id, user.email, user.role);
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        phone: user.phone,
+      },
+    };
+  }
+
+  async portalRefresh(refreshToken: string | undefined, res: Response) {
+    if (!refreshToken) {
+      throw new UnauthorizedException('Refresh token missing');
+    }
+
+    try {
+      const payload = this.jwtService.verify<{ sub: string; type?: string }>(
+        refreshToken,
+        { secret: this.getPortalRefreshSecret() },
+      );
+
+      if (payload.type !== 'portal-refresh') {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      const user = await this.prisma.user.findUnique({
+        where: { id: payload.sub },
+        select: { id: true, email: true, name: true, role: true, phone: true },
+      });
+
+      if (!user || user.role !== Role.ADMIN) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      this.issuePortalTokens(res, user.id, user.email, user.role);
+      return { user };
+    } catch {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+  }
+
+  portalLogout(res: Response) {
+    clearPortalAuthCookies(res, this.config);
+    return { success: true };
   }
 
   async refresh(refreshToken: string | undefined, res: Response) {
@@ -101,6 +178,26 @@ export class AuthService {
     return { success: true };
   }
 
+  async getPortalProfile(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        phone: true,
+        createdAt: true,
+      },
+    });
+
+    if (!user || user.role !== Role.ADMIN) {
+      throw new UnauthorizedException('Portal access denied');
+    }
+
+    return user;
+  }
+
   async getProfile(userId: string) {
     return this.prisma.user.findUnique({
       where: { id: userId },
@@ -134,6 +231,45 @@ export class AuthService {
     );
 
     setAuthCookies(res, this.config, accessToken, refreshToken);
+  }
+
+  private issuePortalTokens(
+    res: Response,
+    id: string,
+    email: string,
+    role: string,
+  ) {
+    const accessToken = this.jwtService.sign(
+      { sub: id, email, role, scope: 'portal' },
+      {
+        secret: this.getPortalAccessSecret(),
+        expiresIn: this.config.get('JWT_EXPIRES_IN') || '15m',
+      },
+    );
+
+    const refreshToken = this.jwtService.sign(
+      { sub: id, type: 'portal-refresh' },
+      {
+        secret: this.getPortalRefreshSecret(),
+        expiresIn: this.config.get('JWT_REFRESH_EXPIRES_IN') || '7d',
+      },
+    );
+
+    setPortalAuthCookies(res, this.config, accessToken, refreshToken);
+  }
+
+  private getPortalAccessSecret() {
+    return (
+      this.config.get<string>('PORTAL_JWT_SECRET') ||
+      `${this.getAccessSecret()}-portal`
+    );
+  }
+
+  private getPortalRefreshSecret() {
+    return (
+      this.config.get<string>('PORTAL_JWT_REFRESH_SECRET') ||
+      `${this.getRefreshSecret()}-portal`
+    );
   }
 
   private getAccessSecret() {
