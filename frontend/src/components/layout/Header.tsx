@@ -9,10 +9,10 @@ import { SearchModal } from './SearchModal';
 import { MobileMenu } from './MobileMenu';
 
 const shopLinks = [
-  { href: '/shop', label: 'All products' },
-  { href: '/shop/tops', label: 'Tops' },
-  { href: '/shop/bottoms', label: 'Bottoms' },
-  { href: '/shop/accessories', label: 'Accessories' },
+  { href: '/collections/all-products', label: 'All products' },
+  { href: '/collections/tops', label: 'Tops' },
+  { href: '/collections/bottoms', label: 'Bottoms' },
+  { href: '/collections/accessories', label: 'Accessories' },
 ];
 
 export function Header() {
@@ -68,9 +68,9 @@ export function Header() {
                   onMouseLeave={() => setShopOpen(false)}
                 >
                   <Link
-                    href="/shop"
+                    href="/collections/all-products"
                     className={`text-sm tracking-wide link-underline ${
-                      pathname.startsWith('/shop') ? 'font-medium' : ''
+                      pathname.startsWith('/collections') ? 'font-medium' : ''
                     }`}
                   >
                     Shop

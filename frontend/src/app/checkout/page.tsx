@@ -14,7 +14,7 @@ export default function CheckoutPage() {
     return (
       <div className="max-w-lg mx-auto px-4 py-16 text-center">
         <h1 className="text-2xl font-medium mb-4">Your cart is empty</h1>
-        <Link href="/shop" className="btn-primary">Continue shopping</Link>
+        <Link href="/collections/all-products" className="btn-primary">Continue shopping</Link>
       </div>
     );
   }

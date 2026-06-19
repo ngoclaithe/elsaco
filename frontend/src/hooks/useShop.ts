@@ -14,14 +14,19 @@ const SORT_OPTIONS = [
   { value: 'oldest', label: 'Date, old to new' },
 ] as const;
 
+const COLLECTION_TITLES: Record<string, string> = {
+  'all-products': 'All Products',
+  tops: 'Tops',
+  bottoms: 'Bottoms',
+  accessories: 'Accessories',
+};
+
 export function useShop() {
   const searchParams = useSearchParams();
   const params = useParams();
 
-  const categoryParam = params?.category;
-  const category = Array.isArray(categoryParam)
-    ? categoryParam[0] || ''
-    : (categoryParam as string) || searchParams.get('category') || '';
+  const handle = (params?.handle as string) || 'all-products';
+  const category = handle === 'all-products' ? '' : handle;
   const search = searchParams.get('search') || '';
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -33,11 +38,9 @@ export function useShop() {
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
 
-  const categoryTitle = category
-    ? category.charAt(0).toUpperCase() + category.slice(1)
-    : search
-      ? `Search: "${search}"`
-      : 'All products';
+  const categoryTitle = search
+    ? `Search: "${search}"`
+    : COLLECTION_TITLES[handle] || handle;
 
   const loadProducts = useCallback(async () => {
     setLoading(true);

@@ -9,6 +9,7 @@
     "dev:web": "npm run dev --workspace=frontend",
     "db:migrate": "npm run prisma:migrate --workspace=backend",
     "db:seed": "npm run prisma:seed --workspace=backend",
+    "scrape:acp": "node scripts/scrape-acp.js",
     "build": "npm run build --workspace=backend && npm run build --workspace=frontend",
     "start:prod": "pm2 start ecosystem.config.js"
   },

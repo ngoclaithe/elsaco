@@ -26,7 +26,7 @@ export function ProductCard({ product, showQuickActions = true }: ProductCardPro
         </Link>
 
         {onSale && (
-          <span className="absolute top-3 left-3 z-10 bg-sale text-white text-[11px] font-medium uppercase tracking-wider px-2.5 py-1">
+          <span className="absolute top-3 left-3 z-10 w-10 h-10 rounded-full bg-black text-white text-[10px] font-medium flex items-center justify-center">
             Sale
           </span>
         )}
@@ -45,7 +45,7 @@ export function ProductCard({ product, showQuickActions = true }: ProductCardPro
 
       <div className="space-y-1 px-1">
         <Link href={`/products/${product.slug}`}>
-          <h3 className="text-[15px] leading-snug line-clamp-2 hover:underline">
+          <h3 className="text-sm leading-snug line-clamp-2 hover:underline uppercase tracking-wide">
             {product.name}
           </h3>
         </Link>

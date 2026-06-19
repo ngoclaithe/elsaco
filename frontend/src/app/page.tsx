@@ -15,7 +15,7 @@ export default async function HomePage() {
     <>
       <section className="relative w-full aspect-[4/5] sm:aspect-[16/10] lg:aspect-[21/9] max-h-[90vh] bg-neutral-900">
         <Image
-          src="https://picsum.photos/seed/elsaco-hero/1920/1080"
+          src="https://cdn.shopify.com/s/files/1/0824/3373/6933/files/201.png?width=1920"
           alt="elSaco"
           fill
           priority
@@ -23,7 +23,7 @@ export default async function HomePage() {
           sizes="100vw"
         />
         <div className="absolute inset-0 flex items-end justify-center pb-12 sm:pb-16">
-          <Link href="/shop" className="btn-primary min-w-[220px] text-center">
+          <Link href="/collections/all-products" className="btn-primary min-w-[220px] text-center">
             Shop now
           </Link>
         </div>

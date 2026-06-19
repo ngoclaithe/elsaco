@@ -108,7 +108,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
 
           {results.length > 0 && (
             <Link
-              href={`/shop?search=${encodeURIComponent(query)}`}
+              href={`/collections/all-products?search=${encodeURIComponent(query)}`}
               onClick={onClose}
               className="block mt-6 text-sm text-center link-underline"
             >

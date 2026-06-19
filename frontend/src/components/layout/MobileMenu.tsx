@@ -9,10 +9,10 @@ interface MobileMenuProps {
 
 const links = [
   { href: '/', label: 'Home' },
-  { href: '/shop', label: 'All products' },
-  { href: '/shop/tops', label: 'Tops' },
-  { href: '/shop/bottoms', label: 'Bottoms' },
-  { href: '/shop/accessories', label: 'Accessories' },
+  { href: '/collections/all-products', label: 'All products' },
+  { href: '/collections/tops', label: 'Tops' },
+  { href: '/collections/bottoms', label: 'Bottoms' },
+  { href: '/collections/accessories', label: 'Accessories' },
   { href: '/about', label: 'About us' },
 ];
 
