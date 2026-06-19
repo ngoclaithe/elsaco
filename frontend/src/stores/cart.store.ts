@@ -8,7 +8,7 @@ interface CartStore {
   setOpen: (open: boolean) => void;
   setItems: (items: CartItem[]) => void;
   fetchCart: () => Promise<void>;
-  addItem: (productId: string, size: string, quantity?: number) => Promise<void>;
+  addItem: (productId: string, size: string, quantity?: number, openCart?: boolean) => Promise<void>;
   updateItem: (itemId: string, quantity: number) => Promise<void>;
   removeItem: (itemId: string) => Promise<void>;
   clearItems: () => void;
@@ -32,9 +32,9 @@ export const useCartStore = create<CartStore>((set, get) => ({
     }
   },
 
-  addItem: async (productId, size, quantity = 1) => {
+  addItem: async (productId, size, quantity = 1, openCart = true) => {
     const cart = await cartApi.addItem(productId, size, quantity);
-    set({ items: cart.items, isOpen: true });
+    set({ items: cart.items, isOpen: openCart });
   },
 
   updateItem: async (itemId, quantity) => {

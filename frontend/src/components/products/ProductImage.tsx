@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 interface ProductImageProps {
@@ -21,6 +21,10 @@ export function ProductImage({
   className = 'object-cover',
 }: ProductImageProps) {
   const [imgSrc, setImgSrc] = useState(src);
+
+  useEffect(() => {
+    setImgSrc(src);
+  }, [src]);
 
   return (
     <Image

@@ -15,8 +15,10 @@ export default function ProductPage() {
     setActiveImage,
     loading,
     adding,
+    buying,
     error,
     handleAddToCart,
+    handleBuyNow,
   } = useProduct();
 
   if (loading) {
@@ -45,8 +47,10 @@ export default function ProductPage() {
         activeImage={activeImage}
         onSelectImage={setActiveImage}
         adding={adding}
+        buying={buying}
         error={error}
         onAddToCart={handleAddToCart}
+        onBuyNow={handleBuyNow}
       />
 
       {related.length > 0 && (
