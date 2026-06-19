@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useAdminProducts } from '@/hooks/useAdmin';
 import { formatPrice, isOnSale } from '@/lib/utils/format';
 import { ProductFormModal } from '@/components/admin/ProductFormModal';
+import { PortalPageHeader, PortalPanel } from '@/components/admin/PortalUI';
 import type { ProductFormInput } from '@/lib/types';
 
 export default function PortalProductsPage() {
@@ -15,67 +16,97 @@ export default function PortalProductsPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-medium">Products</h1>
-        <button onClick={admin.openCreate} className="btn-primary !py-2 !px-6">
-          Add product
-        </button>
-      </div>
+      <PortalPageHeader
+        title="Products"
+        description={`${admin.products.length} items in catalog`}
+        action={
+          <button onClick={admin.openCreate} className="btn-primary !py-2.5 !px-6">
+            Add product
+          </button>
+        }
+      />
 
       {admin.loading ? (
-        <p className="text-muted">Loading...</p>
+        <p className="text-muted">Loading products...</p>
       ) : (
-        <div className="bg-white border overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b text-left">
-                <th className="p-4">Product</th>
-                <th className="p-4">Category</th>
-                <th className="p-4">Price</th>
-                <th className="p-4">Stock</th>
-                <th className="p-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {admin.products.map((product) => (
-                <tr key={product.id} className="hover:bg-neutral-50">
-                  <td className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="relative w-10 h-12 bg-neutral-100 shrink-0">
-                        <Image src={product.images[0]} alt="" fill className="object-cover" />
-                      </div>
-                      <div>
-                        <p className="font-medium line-clamp-1 max-w-[200px]">{product.name}</p>
-                        {isOnSale(product) && (
-                          <span className="text-2xs text-sale uppercase">Sale</span>
-                        )}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="p-4 text-muted">{product.category?.name}</td>
-                  <td className="p-4">{formatPrice(product.price)}</td>
-                  <td className="p-4">{product.stock}</td>
-                  <td className="p-4">
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => admin.openEdit(product)}
-                        className="text-sm underline"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => admin.deleteProduct(product.id)}
-                        className="text-sm text-sale underline"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
+        <PortalPanel className="overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-neutral-50 border-b border-neutral-200">
+                <tr className="text-left text-xs uppercase tracking-wider text-muted">
+                  <th className="p-4 font-medium">Product</th>
+                  <th className="p-4 font-medium">Category</th>
+                  <th className="p-4 font-medium">Price</th>
+                  <th className="p-4 font-medium">Stock</th>
+                  <th className="p-4 font-medium text-right">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-neutral-100">
+                {admin.products.map((product) => (
+                  <tr key={product.id} className="hover:bg-neutral-50/80">
+                    <td className="p-4">
+                      <div className="flex items-center gap-3 min-w-[240px]">
+                        <div className="relative w-12 h-14 bg-neutral-100 shrink-0 rounded overflow-hidden border border-neutral-200">
+                          <Image
+                            src={product.images[0]}
+                            alt=""
+                            fill
+                            unoptimized
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-medium line-clamp-2 leading-snug">{product.name}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            {product.featured && (
+                              <span className="text-[10px] uppercase px-1.5 py-0.5 bg-neutral-900 text-white rounded">
+                                Featured
+                              </span>
+                            )}
+                            {isOnSale(product) && (
+                              <span className="text-[10px] uppercase px-1.5 py-0.5 bg-sale text-white rounded">
+                                Sale
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-4 text-muted">{product.category?.name}</td>
+                    <td className="p-4 font-medium">{formatPrice(product.price)}</td>
+                    <td className="p-4">
+                      <span
+                        className={`inline-flex px-2 py-0.5 rounded text-xs ${
+                          product.stock <= 5
+                            ? 'bg-red-50 text-red-700'
+                            : 'bg-neutral-100 text-neutral-700'
+                        }`}
+                      >
+                        {product.stock}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex justify-end gap-2">
+                        <button
+                          onClick={() => admin.openEdit(product)}
+                          className="text-sm px-3 py-1.5 border border-neutral-300 rounded hover:border-black"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => admin.deleteProduct(product.id)}
+                          className="text-sm px-3 py-1.5 border border-red-200 text-red-600 rounded hover:bg-red-50"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </PortalPanel>
       )}
 
       {admin.showForm && (

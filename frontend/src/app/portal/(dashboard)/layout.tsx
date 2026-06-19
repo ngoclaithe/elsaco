@@ -31,21 +31,30 @@ export default function PortalDashboardLayout({
   }, [user, isInitialized, router, pathname]);
 
   if (!isInitialized) {
-    return <div className="min-h-screen flex items-center justify-center text-muted">Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-neutral-100 text-muted">
+        Loading portal...
+      </div>
+    );
   }
 
   if (!user) return null;
 
+  const currentPage = navItems.find((item) =>
+    item.exact ? pathname === item.href : pathname.startsWith(item.href),
+  )?.label;
+
   return (
-    <div className="min-h-screen flex">
-      <aside className="w-64 bg-black text-white flex flex-col shrink-0">
-        <div className="p-6 border-b border-white/10">
-          <Link href="/portal" className="text-lg font-semibold tracking-[0.15em] uppercase">
+    <div className="min-h-screen flex bg-neutral-100">
+      <aside className="w-64 bg-white border-r border-neutral-200 flex flex-col shrink-0">
+        <div className="p-5 border-b border-neutral-200">
+          <Link href="/portal" className="text-base font-semibold tracking-[0.12em] uppercase">
             elSaco
           </Link>
-          <p className="text-xs text-white/50 mt-1">Admin Portal</p>
+          <p className="text-xs text-muted mt-1">Admin portal</p>
         </div>
-        <nav className="flex-1 p-4 space-y-1">
+
+        <nav className="flex-1 p-3 space-y-0.5">
           {navItems.map((item) => {
             const active = item.exact
               ? pathname === item.href
@@ -54,10 +63,10 @@ export default function PortalDashboardLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                className={`block px-4 py-2.5 text-sm rounded transition-colors ${
+                className={`block px-3 py-2.5 text-sm rounded-md transition-colors ${
                   active
-                    ? 'bg-white text-black font-medium'
-                    : 'text-white/70 hover:text-white hover:bg-white/10'
+                    ? 'bg-neutral-900 text-white font-medium'
+                    : 'text-neutral-600 hover:bg-neutral-100 hover:text-black'
                 }`}
               >
                 {item.label}
@@ -65,21 +74,33 @@ export default function PortalDashboardLayout({
             );
           })}
         </nav>
-        <div className="p-4 border-t border-white/10 space-y-2">
-          <Link href="/" className="block px-4 py-2 text-sm text-white/70 hover:text-white">
-            ← Back to store
+
+        <div className="p-3 border-t border-neutral-200 space-y-1">
+          <p className="px-3 py-1 text-xs text-muted truncate">{user.email}</p>
+          <Link
+            href="/"
+            className="block px-3 py-2 text-sm text-neutral-600 hover:text-black rounded-md hover:bg-neutral-100"
+          >
+            ← View store
           </Link>
           <button
             onClick={logout}
-            className="block w-full text-left px-4 py-2 text-sm text-white/70 hover:text-white"
+            className="block w-full text-left px-3 py-2 text-sm text-neutral-600 hover:text-black rounded-md hover:bg-neutral-100"
           >
             Log out
           </button>
         </div>
       </aside>
-      <main className="flex-1 bg-neutral-50 overflow-auto">
-        <div className="p-6 lg:p-10">{children}</div>
-      </main>
+
+      <div className="flex-1 flex flex-col min-w-0">
+        <header className="h-14 bg-white border-b border-neutral-200 px-6 flex items-center justify-between shrink-0">
+          <p className="text-sm text-muted">{currentPage || 'Portal'}</p>
+          <Link href="/" className="text-xs text-muted hover:text-black">
+            elsaco.dosutech.site
+          </Link>
+        </header>
+        <main className="flex-1 overflow-auto p-6 lg:p-8">{children}</main>
+      </div>
     </div>
   );
 }
