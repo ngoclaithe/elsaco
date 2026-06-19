@@ -1,0 +1,122 @@
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { productsApi } from '@/lib/api';
+import { formatPrice } from '@/lib/utils/format';
+import type { Product } from '@/lib/types';
+
+interface SearchModalProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+export function SearchModal({ open, onClose }: SearchModalProps) {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (open) {
+      inputRef.current?.focus();
+      setQuery('');
+      setResults([]);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setLoading(true);
+      try {
+        const data = await productsApi.getAll({ search: query, limit: '4' });
+        setResults(data.products);
+      } catch {
+        setResults([]);
+      }
+      setLoading(false);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-[70]">
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div className="relative bg-white max-w-2xl mx-auto mt-20 mx-4 sm:mx-auto shadow-2xl animate-fade-in">
+        <div className="p-6 border-b">
+          <div className="flex items-center gap-4">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0">
+              <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="1.5" />
+              <path d="M14 14l4 4" stroke="currentColor" strokeWidth="1.5" />
+            </svg>
+            <input
+              ref={inputRef}
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search"
+              className="flex-1 text-lg outline-none"
+            />
+            <button onClick={onClose} className="text-sm text-muted hover:text-black">
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <div className="p-6 max-h-[400px] overflow-y-auto">
+          <h4 className="text-xs font-medium uppercase tracking-wider text-muted mb-4">
+            Products
+          </h4>
+
+          {loading && <p className="text-sm text-muted">Searching...</p>}
+          {!loading && query && results.length === 0 && (
+            <p className="text-sm text-muted">No products found</p>
+          )}
+
+          <div className="space-y-4">
+            {results.map((product) => (
+              <Link
+                key={product.id}
+                href={`/products/${product.slug}`}
+                onClick={onClose}
+                className="flex items-center gap-4 group"
+              >
+                <div className="relative w-16 h-20 bg-neutral-100 shrink-0 overflow-hidden">
+                  <Image
+                    src={product.images[0]}
+                    alt={product.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm font-medium line-clamp-2">{product.name}</p>
+                  <p className="text-sm mt-1">{formatPrice(product.price)}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {results.length > 0 && (
+            <Link
+              href={`/shop?search=${encodeURIComponent(query)}`}
+              onClick={onClose}
+              className="block mt-6 text-sm text-center link-underline"
+            >
+              View all
+            </Link>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

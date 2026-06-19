@@ -1,0 +1,77 @@
+'use client';
+
+import { useEffect, useState, useCallback } from 'react';
+import { useParams } from 'next/navigation';
+import { productsApi } from '@/lib/api';
+import type { Product } from '@/lib/types';
+import { useAuth } from './useAuth';
+import { useCart } from './useCart';
+
+export function useProduct() {
+  const params = useParams();
+  const slug = params.slug as string;
+  const { user } = useAuth();
+  const { addItem } = useCart();
+
+  const [product, setProduct] = useState<Product | null>(null);
+  const [related, setRelated] = useState<Product[]>([]);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [quantity] = useState(1);
+  const [activeImage, setActiveImage] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [adding, setAdding] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const [p, r] = await Promise.all([
+          productsApi.getBySlug(slug),
+          productsApi.getRelated(slug),
+        ]);
+        setProduct(p);
+        setRelated(r);
+        if (p.sizes.length === 1) setSelectedSize(p.sizes[0]);
+      } catch {
+        setProduct(null);
+      }
+      setLoading(false);
+    }
+    load();
+  }, [slug]);
+
+  const handleAddToCart = useCallback(async () => {
+    if (!product) return;
+    if (!selectedSize) {
+      setError('Please select a size');
+      return;
+    }
+    if (!user) {
+      window.location.href =
+        '/account/login?redirect=' + encodeURIComponent(window.location.pathname);
+      return;
+    }
+
+    setAdding(true);
+    setError('');
+    try {
+      await addItem(product.id, selectedSize, quantity);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to add to cart');
+    }
+    setAdding(false);
+  }, [product, selectedSize, quantity, user, addItem]);
+
+  return {
+    product,
+    related,
+    selectedSize,
+    setSelectedSize,
+    activeImage,
+    setActiveImage,
+    loading,
+    adding,
+    error,
+    handleAddToCart,
+  };
+}
