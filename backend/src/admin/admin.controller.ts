@@ -70,6 +70,41 @@ class UpdateStatusDto {
   status: OrderStatus;
 }
 
+class CategoryDto {
+  @IsString()
+  name: string;
+
+  @IsString()
+  slug: string;
+}
+
+class UpdateSettingsDto {
+  @IsOptional()
+  @IsString()
+  bankAccountName?: string;
+
+  @IsOptional()
+  @IsString()
+  bankAccountNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  bankName?: string;
+
+  @IsOptional()
+  @IsString()
+  storeName?: string;
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  shippingFee?: number;
+
+  @IsOptional()
+  @IsString()
+  sepayWebhookKey?: string;
+}
+
 @Controller('admin')
 @UseGuards(PortalJwtAuthGuard, RolesGuard)
 @Roles(Role.ADMIN)
@@ -79,6 +114,36 @@ export class AdminController {
   @Get('dashboard')
   getDashboard() {
     return this.adminService.getDashboardStats();
+  }
+
+  @Get('settings')
+  getSettings() {
+    return this.adminService.getSettings();
+  }
+
+  @Patch('settings')
+  updateSettings(@Body() dto: UpdateSettingsDto) {
+    return this.adminService.updateSettings(dto);
+  }
+
+  @Get('categories')
+  getCategories() {
+    return this.adminService.getAllCategories();
+  }
+
+  @Post('categories')
+  createCategory(@Body() dto: CategoryDto) {
+    return this.adminService.createCategory(dto);
+  }
+
+  @Patch('categories/:id')
+  updateCategory(@Param('id') id: string, @Body() dto: Partial<CategoryDto>) {
+    return this.adminService.updateCategory(id, dto);
+  }
+
+  @Delete('categories/:id')
+  deleteCategory(@Param('id') id: string) {
+    return this.adminService.deleteCategory(id);
   }
 
   @Get('products')

@@ -30,6 +30,7 @@ JWT_EXPIRES_IN="15m"
 JWT_REFRESH_EXPIRES_IN="7d"
 PORT=4021
 FRONTEND_URL="https://elsaco.dosutech.site"
+API_PUBLIC_URL="https://api-elsaco.dosutech.site/api"
 COOKIE_DOMAIN=".dosutech.site"
 NODE_ENV="production"
 `;
@@ -41,7 +42,8 @@ PORT=4020
 `;
 
 const frontendEnvProd = `# Production — copy to VPS frontend/.env.production
-NEXT_PUBLIC_API_URL=https://api-elsaco.dosutech.site/api
+NEXT_PUBLIC_API_URL=/api
+API_INTERNAL_URL=http://localhost:4021
 PORT=4020
 `;
 

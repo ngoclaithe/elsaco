@@ -39,6 +39,14 @@ export class OrdersController {
     return this.ordersService.findByUser(req.user.id);
   }
 
+  @Get(':id/payment')
+  getPayment(
+    @Request() req: { user: { id: string } },
+    @Param('id') id: string,
+  ) {
+    return this.ordersService.getPaymentInfo(req.user.id, id);
+  }
+
   @Get(':id')
   findById(
     @Request() req: { user: { id: string } },

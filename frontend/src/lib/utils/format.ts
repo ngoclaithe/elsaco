@@ -24,4 +24,10 @@ export const ORDER_STATUS_OPTIONS = [
   'CANCELLED',
 ] as const;
 
+export const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  PENDING: 'Awaiting payment',
+  PAID: 'Paid',
+  FAILED: 'Failed',
+};
+
 export const SHIPPING_FEE = 30000;

@@ -1,5 +1,5 @@
 import { apiFetch } from './client';
-import type { CheckoutInput, Order } from '@/lib/types';
+import type { CheckoutInput, Order, OrderPaymentResponse } from '@/lib/types';
 
 export const ordersApi = {
   create: (data: CheckoutInput) =>
@@ -11,4 +11,6 @@ export const ordersApi = {
   getAll: () => apiFetch<Order[]>('/orders'),
 
   getById: (id: string) => apiFetch<Order>(`/orders/${id}`),
+
+  getPayment: (id: string) => apiFetch<OrderPaymentResponse>(`/orders/${id}/payment`),
 };

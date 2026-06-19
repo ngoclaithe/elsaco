@@ -2,6 +2,7 @@ import { PrismaClient, Role } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 import * as fs from 'fs';
 import * as path from 'path';
+import { randomBytes } from 'crypto';
 
 const prisma = new PrismaClient();
 
@@ -31,7 +32,7 @@ async function main() {
 
   await prisma.user.upsert({
     where: { email: 'admin@elsaco.com' },
-    update: {},
+    update: { password: hashedPassword, role: Role.ADMIN },
     create: {
       email: 'admin@elsaco.com',
       password: hashedPassword,
@@ -101,6 +102,20 @@ async function main() {
   }
 
   console.log(`Seed completed: ${acpData.products.length} products`);
+
+  await prisma.siteSettings.upsert({
+    where: { id: 'default' },
+    update: {},
+    create: {
+      id: 'default',
+      bankAccountName: 'Lai The Ngoc',
+      bankAccountNumber: '1468651509999',
+      bankName: 'MBBank',
+      storeName: 'elSaco',
+      sepayWebhookKey: randomBytes(32).toString('hex'),
+      shippingFee: 30000,
+    },
+  });
 }
 
 main()

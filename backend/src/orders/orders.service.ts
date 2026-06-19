@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { SettingsService } from '../settings/settings.service';
 import { OrderStatus } from '@prisma/client';
 
 interface CreateOrderDto {
@@ -12,7 +13,10 @@ interface CreateOrderDto {
 
 @Injectable()
 export class OrdersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private settingsService: SettingsService,
+  ) {}
 
   private generateOrderNumber() {
     const date = new Date();
@@ -22,6 +26,7 @@ export class OrdersService {
   }
 
   async create(userId: string, dto: CreateOrderDto) {
+    const settings = await this.settingsService.getPaymentSettings();
     const cart = await this.prisma.cart.findUnique({
       where: { userId },
       include: { items: { include: { product: true } } },
@@ -43,13 +48,15 @@ export class OrdersService {
       (sum, item) => sum + item.product.price * item.quantity,
       0,
     );
-    const shippingFee = 30000;
+    const shippingFee = settings.shippingFee;
     const total = subtotal + shippingFee;
+    const orderNumber = this.generateOrderNumber();
 
     const order = await this.prisma.$transaction(async (tx) => {
       const newOrder = await tx.order.create({
         data: {
-          orderNumber: this.generateOrderNumber(),
+          orderNumber,
+          transferContent: orderNumber,
           userId,
           subtotal,
           shippingFee,
@@ -86,6 +93,31 @@ export class OrdersService {
     });
 
     return order;
+  }
+
+  async getPaymentInfo(userId: string, orderId: string) {
+    const order = await this.prisma.order.findFirst({
+      where: { id: orderId, userId },
+      include: { items: true },
+    });
+    if (!order) throw new NotFoundException('Order not found');
+
+    const settings = await this.settingsService.getPaymentSettings();
+    const qrUrl = this.settingsService.buildQrUrl(
+      settings,
+      order.total,
+      order.transferContent,
+    );
+
+    return {
+      order,
+      payment: {
+        ...settings,
+        qrUrl,
+        transferContent: order.transferContent,
+        amount: order.total,
+      },
+    };
   }
 
   async findByUser(userId: string) {

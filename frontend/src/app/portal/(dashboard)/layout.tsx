@@ -8,8 +8,10 @@ import { usePortalAuth, usePortalAuthInit } from '@/hooks/usePortalAuth';
 const navItems = [
   { href: '/portal', label: 'Dashboard', exact: true },
   { href: '/portal/products', label: 'Products' },
+  { href: '/portal/categories', label: 'Categories' },
   { href: '/portal/orders', label: 'Orders' },
   { href: '/portal/users', label: 'Users' },
+  { href: '/portal/settings', label: 'Settings' },
 ];
 
 export default function PortalDashboardLayout({

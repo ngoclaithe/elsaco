@@ -20,8 +20,8 @@ function PortalLoginForm() {
     try {
       await login(email, password);
       router.push(redirect);
-    } catch {
-      setError('Invalid admin credentials');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed');
     }
   };
 

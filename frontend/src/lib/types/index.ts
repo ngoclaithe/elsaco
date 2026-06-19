@@ -56,6 +56,10 @@ export interface Order {
   id: string;
   orderNumber: string;
   status: string;
+  paymentStatus?: string;
+  paymentMethod?: string;
+  transferContent?: string;
+  paidAt?: string | null;
   subtotal: number;
   shippingFee: number;
   total: number;
@@ -67,6 +71,31 @@ export interface Order {
   createdAt: string;
   items: OrderItem[];
   user?: { name: string; email: string };
+}
+
+export interface PaymentInfo {
+  bankAccountName: string;
+  bankAccountNumber: string;
+  bankName: string;
+  storeName: string;
+  qrUrl: string;
+  transferContent: string;
+  amount: number;
+}
+
+export interface OrderPaymentResponse {
+  order: Order;
+  payment: PaymentInfo;
+}
+
+export interface SiteSettings {
+  bankAccountName: string;
+  bankAccountNumber: string;
+  bankName: string;
+  storeName: string;
+  shippingFee: number;
+  sepayWebhookKey: string;
+  webhookUrl: string;
 }
 
 export interface ProductsResponse {
@@ -81,6 +110,7 @@ export interface DashboardStats {
   totalOrders: number;
   totalUsers: number;
   totalRevenue: number;
+  pendingPayments: number;
   recentOrders: Order[];
 }
 

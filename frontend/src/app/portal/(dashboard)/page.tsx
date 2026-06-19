@@ -14,12 +14,13 @@ export default function PortalDashboardPage() {
     { label: 'Orders', value: stats.totalOrders, href: '/portal/orders' },
     { label: 'Users', value: stats.totalUsers, href: '/portal/users' },
     { label: 'Revenue', value: formatPrice(stats.totalRevenue), href: '/portal/orders' },
+    { label: 'Awaiting payment', value: stats.pendingPayments, href: '/portal/orders' },
   ];
 
   return (
     <div>
       <h1 className="text-2xl font-medium mb-8">Dashboard</h1>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
         {cards.map((c) => (
           <Link
             key={c.label}

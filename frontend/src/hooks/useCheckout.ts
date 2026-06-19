@@ -48,7 +48,7 @@ export function useCheckout() {
       try {
         const order = await ordersApi.create(form);
         clearItems();
-        router.push(`/account/orders/${order.id}?success=1`);
+        router.push(`/checkout/payment/${order.id}`);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Checkout failed');
       }

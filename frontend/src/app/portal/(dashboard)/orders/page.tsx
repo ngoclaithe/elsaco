@@ -29,6 +29,9 @@ export default function PortalOrdersPage() {
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="text-sm font-medium">{formatPrice(order.total)}</span>
+                  <span className="text-xs uppercase px-2 py-0.5 bg-neutral-100">
+                    {order.paymentStatus || 'PENDING'}
+                  </span>
                   <select
                     value={order.status}
                     onClick={(e) => e.stopPropagation()}
