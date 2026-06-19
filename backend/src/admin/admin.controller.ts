@@ -21,6 +21,7 @@ import {
   IsOptional,
   IsString,
   Min,
+  MinLength,
 } from 'class-validator';
 
 class CreateProductDto {
@@ -105,6 +106,50 @@ class UpdateSettingsDto {
   sepayWebhookKey?: string;
 }
 
+class CreateUserDto {
+  @IsString()
+  email: string;
+
+  @IsString()
+  @MinLength(6)
+  password: string;
+
+  @IsString()
+  name: string;
+
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsOptional()
+  @IsEnum(Role)
+  role?: Role;
+}
+
+class UpdateUserDto {
+  @IsOptional()
+  @IsString()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsOptional()
+  @IsEnum(Role)
+  role?: Role;
+}
+
+class ChangePasswordDto {
+  @IsString()
+  @MinLength(6)
+  password: string;
+}
+
 @Controller('admin')
 @UseGuards(PortalJwtAuthGuard, RolesGuard)
 @Roles(Role.ADMIN)
@@ -179,5 +224,25 @@ export class AdminController {
   @Get('users')
   getUsers() {
     return this.adminService.getAllUsers();
+  }
+
+  @Get('users/:id')
+  getUser(@Param('id') id: string) {
+    return this.adminService.getUserById(id);
+  }
+
+  @Post('users')
+  createUser(@Body() dto: CreateUserDto) {
+    return this.adminService.createUser(dto);
+  }
+
+  @Patch('users/:id')
+  updateUser(@Param('id') id: string, @Body() dto: UpdateUserDto) {
+    return this.adminService.updateUser(id, dto);
+  }
+
+  @Patch('users/:id/password')
+  changeUserPassword(@Param('id') id: string, @Body() dto: ChangePasswordDto) {
+    return this.adminService.changeUserPassword(id, dto);
   }
 }

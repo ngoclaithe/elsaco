@@ -1,6 +1,7 @@
 import { portalApiFetch } from './portal-client';
 import type {
   AdminUser,
+  AdminUserFormInput,
   DashboardStats,
   Order,
   Product,
@@ -36,6 +37,26 @@ export const adminApi = {
     }),
 
   getUsers: () => portalApiFetch<AdminUser[]>('/admin/users'),
+
+  getUser: (id: string) => portalApiFetch<AdminUser>(`/admin/users/${id}`),
+
+  createUser: (data: AdminUserFormInput & { password: string }) =>
+    portalApiFetch<AdminUser>('/admin/users', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  updateUser: (id: string, data: Partial<AdminUserFormInput>) =>
+    portalApiFetch<AdminUser>(`/admin/users/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    }),
+
+  changeUserPassword: (id: string, password: string) =>
+    portalApiFetch<{ success: boolean }>(`/admin/users/${id}/password`, {
+      method: 'PATCH',
+      body: JSON.stringify({ password }),
+    }),
 
   getSettings: () => portalApiFetch<import('@/lib/types').SiteSettings>('/admin/settings'),
 

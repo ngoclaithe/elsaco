@@ -139,6 +139,14 @@ export interface AdminUser extends User {
   _count: { orders: number };
 }
 
+export interface AdminUserFormInput {
+  email: string;
+  name: string;
+  phone?: string;
+  role: 'USER' | 'ADMIN';
+  password?: string;
+}
+
 export interface RegisterInput {
   email: string;
   password: string;

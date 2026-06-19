@@ -2,7 +2,14 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { adminApi, categoriesApi } from '@/lib/api';
-import type { DashboardStats, Order, Product, ProductFormInput, AdminUser } from '@/lib/types';
+import type {
+  AdminUser,
+  AdminUserFormInput,
+  DashboardStats,
+  Order,
+  Product,
+  ProductFormInput,
+} from '@/lib/types';
 
 export function useAdminDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -110,13 +117,33 @@ export function useAdminUsers() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    adminApi
-      .getUsers()
-      .then(setUsers)
-      .catch(() => setUsers([]))
-      .finally(() => setLoading(false));
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      setUsers(await adminApi.getUsers());
+    } catch {
+      setUsers([]);
+    }
+    setLoading(false);
   }, []);
 
-  return { users, loading };
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const createUser = async (data: AdminUserFormInput & { password: string }) => {
+    await adminApi.createUser(data);
+    load();
+  };
+
+  const updateUser = async (id: string, data: Partial<AdminUserFormInput>) => {
+    await adminApi.updateUser(id, data);
+    load();
+  };
+
+  const changePassword = async (id: string, password: string) => {
+    await adminApi.changeUserPassword(id, password);
+  };
+
+  return { users, loading, load, createUser, updateUser, changePassword };
 }

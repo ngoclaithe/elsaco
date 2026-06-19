@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
 import { SettingsService } from '../settings/settings.service';
-import { OrderStatus, PaymentStatus } from '@prisma/client';
+import { OrderStatus, PaymentStatus, Role } from '@prisma/client';
 
 interface CreateProductDto {
   name: string;
@@ -19,6 +20,21 @@ interface CreateProductDto {
 }
 
 interface UpdateProductDto extends Partial<CreateProductDto> {}
+
+interface UserDto {
+  email: string;
+  name: string;
+  phone?: string;
+  role?: Role;
+}
+
+interface CreateUserDto extends UserDto {
+  password: string;
+}
+
+interface ChangePasswordDto {
+  password: string;
+}
 
 interface CategoryDto {
   name: string;
@@ -250,5 +266,74 @@ export class AdminService {
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  private userSelect = {
+    id: true,
+    email: true,
+    name: true,
+    phone: true,
+    role: true,
+    createdAt: true,
+    _count: { select: { orders: true } },
+  } as const;
+
+  async getUserById(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: this.userSelect,
+    });
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
+  async createUser(dto: CreateUserDto) {
+    const exists = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    if (exists) throw new ConflictException('Email already exists');
+
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+    return this.prisma.user.create({
+      data: {
+        email: dto.email,
+        name: dto.name,
+        phone: dto.phone,
+        role: dto.role || Role.USER,
+        password: hashedPassword,
+      },
+      select: this.userSelect,
+    });
+  }
+
+  async updateUser(id: string, dto: Partial<UserDto>) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) throw new NotFoundException('User not found');
+
+    if (dto.email && dto.email !== user.email) {
+      const exists = await this.prisma.user.findUnique({ where: { email: dto.email } });
+      if (exists) throw new ConflictException('Email already exists');
+    }
+
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        email: dto.email,
+        name: dto.name,
+        phone: dto.phone,
+        role: dto.role,
+      },
+      select: this.userSelect,
+    });
+  }
+
+  async changeUserPassword(id: string, dto: ChangePasswordDto) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) throw new NotFoundException('User not found');
+
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+    await this.prisma.user.update({
+      where: { id },
+      data: { password: hashedPassword },
+    });
+    return { success: true };
   }
 }
