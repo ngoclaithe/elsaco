@@ -1,20 +1,7 @@
-# elSaco — HTTPS (sau certbot)
-# Sau khi chạy certbot, thay thế file .conf bằng nội dung này:
-#
-# sudo certbot certonly --webroot -w /var/www/certbot \
-#   -d elsaco.dosutech.site -d api-elsaco.dosutech.site
-#
-# sudo nginx -t && sudo systemctl reload nginx
-
 server {
     listen 80;
     server_name elsaco.dosutech.site;
-    location /.well-known/acme-challenge/ {
-        root /var/www/certbot;
-    }
-    location / {
-        return 301 https://$host$request_uri;
-    }
+    return 301 https://$host$request_uri;
 }
 
 server {

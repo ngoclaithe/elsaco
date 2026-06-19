@@ -1,14 +1,7 @@
-# elSaco API — HTTPS (sau certbot)
-
 server {
     listen 80;
     server_name api-elsaco.dosutech.site;
-    location /.well-known/acme-challenge/ {
-        root /var/www/certbot;
-    }
-    location / {
-        return 301 https://$host$request_uri;
-    }
+    return 301 https://$host$request_uri;
 }
 
 server {
