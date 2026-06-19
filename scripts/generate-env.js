@@ -44,11 +44,17 @@ PORT=4020
 const root = path.join(__dirname, '..');
 fs.writeFileSync(path.join(root, 'backend', '.env'), backendEnv);
 fs.writeFileSync(path.join(root, 'backend', '.env.production.example'), backendEnvProd);
+fs.writeFileSync(path.join(root, 'backend', '.env.production'), backendEnvProd);
 fs.writeFileSync(path.join(root, 'frontend', '.env.local'), frontendEnvLocal);
 fs.writeFileSync(path.join(root, 'frontend', '.env.production.example'), frontendEnvProd);
+fs.writeFileSync(path.join(root, 'frontend', '.env.production'), frontendEnvProd);
 
 console.log('Generated:');
 console.log('  backend/.env');
+console.log('  backend/.env.production');
 console.log('  backend/.env.production.example');
 console.log('  frontend/.env.local');
+console.log('  frontend/.env.production');
 console.log('  frontend/.env.production.example');
+console.log('');
+console.log('Database: postgresql://postgres:test1234@localhost:5432/elsaco');
