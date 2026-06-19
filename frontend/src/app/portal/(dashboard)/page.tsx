@@ -3,7 +3,16 @@
 import Link from 'next/link';
 import { useAdminDashboard } from '@/hooks/useAdmin';
 import { formatPrice, ORDER_STATUS_LABELS } from '@/lib/utils/format';
+import { DashboardCharts } from '@/components/admin/DashboardCharts';
 import { PortalPageHeader, PortalPanel } from '@/components/admin/PortalUI';
+
+const statMeta = [
+  { label: 'Products', key: 'totalProducts' as const, href: '/portal/products', accent: 'bg-neutral-900' },
+  { label: 'Orders', key: 'totalOrders' as const, href: '/portal/orders', accent: 'bg-blue-600' },
+  { label: 'Users', key: 'totalUsers' as const, href: '/portal/users', accent: 'bg-violet-600' },
+  { label: 'Revenue', key: 'totalRevenue' as const, href: '/portal/orders', accent: 'bg-emerald-600', format: formatPrice },
+  { label: 'Awaiting payment', key: 'pendingPayments' as const, href: '/portal/orders', accent: 'bg-amber-500' },
+];
 
 export default function PortalDashboardPage() {
   const { stats } = useAdminDashboard();
@@ -19,30 +28,29 @@ export default function PortalDashboardPage() {
     );
   }
 
-  const cards = [
-    { label: 'Products', value: stats.totalProducts, href: '/portal/products' },
-    { label: 'Orders', value: stats.totalOrders, href: '/portal/orders' },
-    { label: 'Users', value: stats.totalUsers, href: '/portal/users' },
-    { label: 'Revenue', value: formatPrice(stats.totalRevenue), href: '/portal/orders' },
-    { label: 'Awaiting payment', value: stats.pendingPayments, href: '/portal/orders' },
-  ];
-
   return (
     <div>
       <PortalPageHeader title="Dashboard" description="Store overview and recent activity" />
 
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-        {cards.map((c) => (
-          <Link
-            key={c.label}
-            href={c.href}
-            className="bg-white border border-neutral-200 rounded-lg p-5 shadow-sm hover:border-neutral-400 transition-colors"
-          >
-            <p className="text-xs uppercase tracking-wider text-muted mb-2">{c.label}</p>
-            <p className="text-2xl font-semibold tracking-tight">{c.value}</p>
-          </Link>
-        ))}
+        {statMeta.map((c) => {
+          const raw = stats[c.key];
+          const value = c.format ? c.format(raw) : raw;
+          return (
+            <Link
+              key={c.label}
+              href={c.href}
+              className="bg-white border border-neutral-200 rounded-lg p-5 shadow-sm hover:border-neutral-400 transition-colors relative overflow-hidden"
+            >
+              <span className={`absolute top-0 left-0 w-full h-1 ${c.accent}`} />
+              <p className="text-xs uppercase tracking-wider text-muted mb-2">{c.label}</p>
+              <p className="text-2xl font-semibold tracking-tight">{value}</p>
+            </Link>
+          );
+        })}
       </div>
+
+      <DashboardCharts stats={stats} />
 
       <PortalPanel>
         <div className="p-5 border-b border-neutral-200 flex justify-between items-center">

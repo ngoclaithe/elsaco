@@ -105,6 +105,23 @@ export interface ProductsResponse {
   totalPages: number;
 }
 
+export interface DashboardChartDay {
+  date: string;
+  label: string;
+  orders: number;
+  revenue: number;
+}
+
+export interface DashboardStatusSlice {
+  status: string;
+  count: number;
+}
+
+export interface DashboardCategorySlice {
+  name: string;
+  count: number;
+}
+
 export interface DashboardStats {
   totalProducts: number;
   totalOrders: number;
@@ -112,6 +129,9 @@ export interface DashboardStats {
   totalRevenue: number;
   pendingPayments: number;
   recentOrders: Order[];
+  salesChart: DashboardChartDay[];
+  ordersByStatus: DashboardStatusSlice[];
+  productsByCategory: DashboardCategorySlice[];
 }
 
 export interface AdminUser extends User {

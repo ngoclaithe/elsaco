@@ -40,25 +40,77 @@ export class AdminService {
     return `http://localhost:${port}/api`;
   }
 
+  private buildLast7DaysChart(
+    orders: { createdAt: Date; total: number; paymentStatus: PaymentStatus }[],
+  ) {
+    const days = 7;
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+    start.setDate(start.getDate() - (days - 1));
+
+    const dateKey = (d: Date) => d.toISOString().slice(0, 10);
+
+    return Array.from({ length: days }, (_, i) => {
+      const day = new Date(start);
+      day.setDate(start.getDate() + i);
+      const key = dateKey(day);
+      const dayOrders = orders.filter((o) => dateKey(o.createdAt) === key);
+
+      return {
+        date: key,
+        label: day.toLocaleDateString('vi-VN', { weekday: 'short', day: 'numeric' }),
+        orders: dayOrders.length,
+        revenue: dayOrders
+          .filter((o) => o.paymentStatus === PaymentStatus.PAID)
+          .reduce((sum, o) => sum + o.total, 0),
+      };
+    });
+  }
+
   async getDashboardStats() {
-    const [totalProducts, totalOrders, totalUsers, revenue, pendingPayments, recentOrders] =
-      await Promise.all([
-        this.prisma.product.count(),
-        this.prisma.order.count(),
-        this.prisma.user.count({ where: { role: 'USER' } }),
-        this.prisma.order.aggregate({
-          _sum: { total: true },
-          where: { paymentStatus: PaymentStatus.PAID },
-        }),
-        this.prisma.order.count({ where: { paymentStatus: PaymentStatus.PENDING } }),
-        this.prisma.order.findMany({
-          take: 5,
-          orderBy: { createdAt: 'desc' },
-          include: {
-            user: { select: { name: true, email: true } },
-          },
-        }),
-      ]);
+    const chartStart = new Date();
+    chartStart.setHours(0, 0, 0, 0);
+    chartStart.setDate(chartStart.getDate() - 6);
+
+    const [
+      totalProducts,
+      totalOrders,
+      totalUsers,
+      revenue,
+      pendingPayments,
+      recentOrders,
+      chartOrders,
+      ordersByStatus,
+      productsByCategory,
+    ] = await Promise.all([
+      this.prisma.product.count(),
+      this.prisma.order.count(),
+      this.prisma.user.count({ where: { role: 'USER' } }),
+      this.prisma.order.aggregate({
+        _sum: { total: true },
+        where: { paymentStatus: PaymentStatus.PAID },
+      }),
+      this.prisma.order.count({ where: { paymentStatus: PaymentStatus.PENDING } }),
+      this.prisma.order.findMany({
+        take: 5,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          user: { select: { name: true, email: true } },
+        },
+      }),
+      this.prisma.order.findMany({
+        where: { createdAt: { gte: chartStart } },
+        select: { createdAt: true, total: true, paymentStatus: true },
+      }),
+      this.prisma.order.groupBy({
+        by: ['status'],
+        _count: { status: true },
+      }),
+      this.prisma.category.findMany({
+        select: { name: true, _count: { select: { products: true } } },
+        orderBy: { name: 'asc' },
+      }),
+    ]);
 
     return {
       totalProducts,
@@ -67,6 +119,15 @@ export class AdminService {
       totalRevenue: revenue._sum.total || 0,
       pendingPayments,
       recentOrders,
+      salesChart: this.buildLast7DaysChart(chartOrders),
+      ordersByStatus: ordersByStatus.map((row) => ({
+        status: row.status,
+        count: row._count.status,
+      })),
+      productsByCategory: productsByCategory.map((cat) => ({
+        name: cat.name,
+        count: cat._count.products,
+      })),
     };
   }
 
