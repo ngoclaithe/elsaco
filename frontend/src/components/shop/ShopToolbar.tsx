@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from 'react';
 import { FilterPanel } from './ShopFilters';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 
 interface SortOption {
   value: string;
@@ -72,9 +73,11 @@ export function ShopToolbar({
     filterProps.minPrice ||
     filterProps.maxPrice;
 
+  useBodyScrollLock(filterOpen);
+
   return (
     <>
-      <div className="flex items-center justify-between mb-6 lg:mb-8 pb-4 border-b border-neutral-200">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6 lg:mb-8 pb-4 border-b border-neutral-200">
         <div className="hidden lg:flex items-center gap-8">
           <FilterDropdown label="Availability">
             <div className="space-y-2">
@@ -136,7 +139,7 @@ export function ShopToolbar({
 
         <button
           onClick={() => setFilterOpen(true)}
-          className="lg:hidden text-sm flex items-center gap-2"
+          className="lg:hidden text-sm flex items-center gap-2 touch-target -ml-2"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" strokeWidth="1.5" />
@@ -150,7 +153,7 @@ export function ShopToolbar({
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="text-sm appearance-none border-0 outline-none bg-transparent pr-6 cursor-pointer"
+              className="text-sm appearance-none border-0 outline-none bg-transparent pr-6 cursor-pointer min-h-[44px]"
             >
               {sortOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -174,7 +177,7 @@ export function ShopToolbar({
       {filterOpen && (
         <div className="fixed inset-0 z-[60] lg:hidden">
           <div className="absolute inset-0 bg-black/40" onClick={() => setFilterOpen(false)} />
-          <div className="absolute left-0 top-0 bottom-0 w-[300px] bg-white p-6 overflow-y-auto animate-slide-in-right">
+          <div className="absolute left-0 top-0 bottom-0 w-[min(300px,85vw)] bg-white p-4 sm:p-6 overflow-y-auto animate-slide-in-left safe-bottom">
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-medium">Filter</h3>
               <button onClick={() => setFilterOpen(false)}>✕</button>

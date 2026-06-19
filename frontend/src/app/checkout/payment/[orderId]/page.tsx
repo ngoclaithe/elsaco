@@ -77,15 +77,15 @@ function PaymentContent() {
   const { order, payment } = data;
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-12 lg:py-16">
-      <h1 className="text-2xl font-medium mb-2">Bank transfer</h1>
-      <p className="text-sm text-muted mb-8">
+    <div className="max-w-lg mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-16">
+      <h1 className="text-xl sm:text-2xl font-medium mb-2">Bank transfer</h1>
+      <p className="text-sm text-muted mb-6 sm:mb-8 break-words">
         Order #{order.orderNumber} · {PAYMENT_STATUS_LABELS[order.paymentStatus || 'PENDING']}
       </p>
 
-      <div className="border border-neutral-200 p-6 space-y-6">
+      <div className="border border-neutral-200 p-4 sm:p-6 space-y-6">
         <div className="text-center">
-          <div className="relative w-64 h-64 mx-auto bg-white border border-neutral-200">
+          <div className="relative w-full max-w-64 aspect-square mx-auto bg-white border border-neutral-200">
             <Image
               src={payment.qrUrl}
               alt="Payment QR"
@@ -98,28 +98,28 @@ function PaymentContent() {
         </div>
 
         <div className="space-y-3 text-sm">
-          <div className="flex justify-between">
-            <span className="text-muted">Bank</span>
-            <span className="font-medium">{payment.bankName}</span>
+          <div className="flex justify-between gap-4">
+            <span className="text-muted shrink-0">Bank</span>
+            <span className="font-medium text-right">{payment.bankName}</span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-muted">Account</span>
-            <span className="font-medium">{payment.bankAccountNumber}</span>
+          <div className="flex justify-between gap-4">
+            <span className="text-muted shrink-0">Account</span>
+            <span className="font-medium text-right break-all">{payment.bankAccountNumber}</span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-muted">Account name</span>
-            <span className="font-medium">{payment.bankAccountName}</span>
+          <div className="flex justify-between gap-4">
+            <span className="text-muted shrink-0">Account name</span>
+            <span className="font-medium text-right">{payment.bankAccountName}</span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-muted">Amount</span>
+          <div className="flex justify-between gap-4">
+            <span className="text-muted shrink-0">Amount</span>
             <span className="font-medium text-base">{formatPrice(payment.amount)}</span>
           </div>
-          <div className="flex justify-between items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4">
             <span className="text-muted shrink-0">Transfer content</span>
             <button
               type="button"
               onClick={copyContent}
-              className="font-medium underline hover:no-underline text-right"
+              className="font-medium underline hover:no-underline text-left sm:text-right break-all"
             >
               {payment.transferContent}
               {copied ? ' ✓' : ''}

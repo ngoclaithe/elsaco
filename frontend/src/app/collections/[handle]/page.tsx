@@ -9,7 +9,7 @@ function CollectionContent() {
   const shop = useShop();
 
   return (
-    <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-6 lg:py-10">
+    <div className="store-container py-4 sm:py-6 lg:py-10">
       <ShopToolbar
         total={shop.total}
         sort={shop.sort}
@@ -29,7 +29,7 @@ function CollectionContent() {
       <h1 className="sr-only">{shop.categoryTitle}</h1>
 
       {shop.loading ? (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="animate-pulse">
               <div className="aspect-[3/4] bg-neutral-200 mb-3" />

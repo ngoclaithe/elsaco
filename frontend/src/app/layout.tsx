@@ -12,6 +12,12 @@ export const metadata: Metadata = {
   description: 'elSaco - Streetwear Fashion',
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover' as const,
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -19,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi">
-      <body className="min-h-screen flex flex-col">
+      <body className="min-h-screen flex flex-col overflow-x-hidden">
         <AuthProvider>
           <CartRouteSync />
           <StoreOnly>

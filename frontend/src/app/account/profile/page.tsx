@@ -9,7 +9,7 @@ export default function ProfilePage() {
   if (!user) return null;
 
   return (
-    <div className="max-w-md mx-auto px-4 lg:px-8 py-12">
+    <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <Link href="/account" className="text-sm text-muted hover:text-black">← Account</Link>
       <h1 className="text-2xl font-medium mb-8 mt-4">Profile</h1>
       <form onSubmit={saveProfile} className="space-y-4">

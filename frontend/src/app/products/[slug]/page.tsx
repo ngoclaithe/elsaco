@@ -23,8 +23,8 @@ export default function ProductPage() {
 
   if (loading) {
     return (
-      <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-12">
-        <div className="grid lg:grid-cols-2 gap-8 animate-pulse">
+      <div className="store-container py-8 sm:py-12">
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 animate-pulse">
           <div className="aspect-[3/4] bg-neutral-200" />
           <div className="space-y-4">
             <div className="h-8 bg-neutral-200 w-3/4" />
@@ -39,7 +39,7 @@ export default function ProductPage() {
   if (!product) notFound();
 
   return (
-    <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-8 lg:py-12">
+    <div className="store-container py-6 sm:py-8 lg:py-12">
       <ProductDetailView
         product={product}
         selectedSize={selectedSize}
@@ -54,8 +54,8 @@ export default function ProductPage() {
       />
 
       {related.length > 0 && (
-        <section className="mt-16 lg:mt-24">
-          <h2 className="text-lg font-medium mb-8">You may also like</h2>
+        <section className="mt-12 sm:mt-16 lg:mt-24">
+          <h2 className="text-base sm:text-lg font-medium mb-6 sm:mb-8 px-4 sm:px-0">You may also like</h2>
           <ProductGrid products={related} />
         </section>
       )}

@@ -23,7 +23,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 py-16 lg:py-24">
+    <div className="max-w-md mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-24">
       <h1 className="text-2xl font-medium text-center mb-2">Create account</h1>
       <p className="text-sm text-muted text-center mb-8">
         Already have an account?{' '}

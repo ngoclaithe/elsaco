@@ -22,8 +22,8 @@ export default async function HomePage() {
           className="object-cover"
           sizes="100vw"
         />
-        <div className="absolute inset-0 flex items-end justify-center pb-12 sm:pb-16">
-          <Link href="/collections/all-products" className="btn-primary min-w-[220px] text-center">
+        <div className="absolute inset-0 flex items-end justify-center pb-10 sm:pb-12 md:pb-16 px-4">
+          <Link href="/collections/all-products" className="btn-primary w-full max-w-xs sm:w-auto sm:min-w-[220px] text-center">
             Shop now
           </Link>
         </div>

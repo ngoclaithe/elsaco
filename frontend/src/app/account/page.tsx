@@ -21,13 +21,13 @@ export default function AccountPage() {
   ];
 
   return (
-    <div className="max-w-2xl mx-auto px-4 lg:px-8 py-12 lg:py-16">
-      <div className="flex items-center justify-between mb-8">
-        <div>
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-8">
+        <div className="min-w-0">
           <h1 className="text-2xl font-medium">Account</h1>
-          <p className="text-sm text-muted mt-1">Welcome back, {user.name}</p>
+          <p className="text-sm text-muted mt-1 truncate">Welcome back, {user.name}</p>
         </div>
-        <button onClick={logout} className="text-sm underline hover:no-underline">Log out</button>
+        <button onClick={logout} className="text-sm underline hover:no-underline self-start min-h-[44px] px-1">Log out</button>
       </div>
 
       <div className="space-y-4">

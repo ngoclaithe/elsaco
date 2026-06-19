@@ -14,21 +14,21 @@ export function ProductGrid({ products, columns = 4, tight = false, className }:
     columns === 2
       ? 'grid-cols-2'
       : columns === 3
-        ? 'grid-cols-2 lg:grid-cols-3'
-        : 'grid-cols-2 lg:grid-cols-4';
+        ? 'grid-cols-2 md:grid-cols-3'
+        : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
 
   return (
     <div
       className={clsx(
         'grid',
         colClass,
-        tight ? 'gap-px bg-neutral-200' : 'gap-4 lg:gap-6',
-        !tight && 'max-w-[1400px] mx-auto px-4 lg:px-8 py-8 lg:py-12',
+        tight ? 'gap-px bg-neutral-200' : 'gap-3 sm:gap-4 lg:gap-6',
+        !tight && 'store-container py-6 sm:py-8 lg:py-12',
         className,
       )}
     >
       {products.map((product) => (
-        <div key={product.id} className={clsx(tight && 'bg-white p-3 sm:p-4')}>
+        <div key={product.id} className={clsx(tight && 'bg-white p-2 sm:p-3 md:p-4')}>
           <ProductCard product={product} />
         </div>
       ))}

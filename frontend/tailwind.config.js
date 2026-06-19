@@ -22,6 +22,7 @@ module.exports = {
       animation: {
         'fade-in': 'fadeIn 0.3s ease-out',
         'slide-in-right': 'slideInRight 0.3s ease-out',
+        'slide-in-left': 'slideInLeft 0.3s ease-out',
         'slide-in-up': 'slideInUp 0.3s ease-out',
       },
       keyframes: {
@@ -31,6 +32,10 @@ module.exports = {
         },
         slideInRight: {
           '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        slideInLeft: {
+          '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(0)' },
         },
         slideInUp: {

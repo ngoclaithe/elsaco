@@ -12,7 +12,7 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="max-w-lg mx-auto px-4 py-16 text-center">
+      <div className="max-w-lg mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center">
         <h1 className="text-2xl font-medium mb-4">Your cart is empty</h1>
         <Link href="/collections/all-products" className="btn-primary">Continue shopping</Link>
       </div>
@@ -20,10 +20,10 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4 lg:px-8 py-8 lg:py-12">
-      <h1 className="text-2xl font-medium mb-8">Checkout</h1>
-      <div className="grid lg:grid-cols-2 gap-12">
-        <form onSubmit={submitOrder} className="space-y-6">
+    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+      <h1 className="text-xl sm:text-2xl font-medium mb-6 sm:mb-8">Checkout</h1>
+      <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+        <form onSubmit={submitOrder} className="space-y-6 order-2 lg:order-1">
           <div>
             <h2 className="text-sm font-medium uppercase tracking-wider mb-4">Shipping information</h2>
             <div className="space-y-4">
@@ -39,19 +39,19 @@ export default function CheckoutPage() {
             {loading ? 'Processing...' : 'Place order'}
           </button>
         </form>
-        <div>
+        <div className="order-1 lg:order-2 lg:sticky lg:top-24 lg:self-start">
           <h2 className="text-sm font-medium uppercase tracking-wider mb-4">Order summary</h2>
-          <div className="border border-neutral-200 p-6 space-y-4">
+          <div className="border border-neutral-200 p-4 sm:p-6 space-y-4">
             {items.map((item) => (
-              <div key={item.id} className="flex gap-4">
+              <div key={item.id} className="flex gap-3 sm:gap-4 min-w-0">
                 <div className="relative w-16 h-20 bg-neutral-100 shrink-0">
                   <Image src={item.product.images[0]} alt={item.product.name} fill className="object-cover" />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <p className="text-sm line-clamp-2">{item.product.name}</p>
                   <p className="text-xs text-muted">Size: {item.size}</p>
                 </div>
-                <p className="text-sm">{formatPrice(item.product.price * item.quantity)}</p>
+                <p className="text-sm shrink-0">{formatPrice(item.product.price * item.quantity)}</p>
               </div>
             ))}
             <div className="border-t pt-4 space-y-2 text-sm">

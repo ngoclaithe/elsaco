@@ -60,16 +60,16 @@ export function ProductDetailView({
   };
 
   return (
-    <div className="grid lg:grid-cols-2 gap-8 lg:gap-16">
+    <div className="grid md:grid-cols-2 gap-6 sm:gap-8 lg:gap-16">
       <div>
-        <div className="group relative aspect-[3/4] bg-neutral-100 overflow-hidden mb-4">
+        <div className="group relative aspect-[3/4] bg-neutral-100 overflow-hidden mb-3 sm:mb-4">
           <ProductImage
             key={displaySrc}
             src={displaySrc}
             alt={product.name}
             priority
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] animate-fade-in"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 50vw"
+            className="object-cover transition-transform duration-500 ease-out lg:group-hover:scale-[1.02] animate-fade-in"
           />
 
           {onSale && (
@@ -83,7 +83,7 @@ export function ProductDetailView({
               <button
                 type="button"
                 onClick={() => goImage(-1)}
-                className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white/90 hover:bg-white border border-neutral-200 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center bg-white/90 hover:bg-white border border-neutral-200 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity"
                 aria-label="Previous image"
               >
                 <ChevronIcon direction="left" />
@@ -91,7 +91,7 @@ export function ProductDetailView({
               <button
                 type="button"
                 onClick={() => goImage(1)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white/90 hover:bg-white border border-neutral-200 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center bg-white/90 hover:bg-white border border-neutral-200 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity"
                 aria-label="Next image"
               >
                 <ChevronIcon direction="right" />
@@ -127,9 +127,9 @@ export function ProductDetailView({
         )}
       </div>
 
-      <div className="lg:pt-8">
+      <div className="md:pt-0 lg:pt-8">
         <p className="text-xs text-muted uppercase tracking-wider mb-2">elSaco</p>
-        <h1 className="text-2xl lg:text-3xl font-medium mb-4 uppercase tracking-wide">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-medium mb-4 uppercase tracking-wide">
           {product.name}
         </h1>
 
@@ -158,7 +158,7 @@ export function ProductDetailView({
                 type="button"
                 onClick={() => onSelectSize(size)}
                 disabled={product.stock === 0}
-                className={`min-w-[48px] px-4 py-2 border text-sm transition-colors ${
+                className={`min-w-[48px] min-h-[44px] px-4 py-2 border text-sm transition-colors ${
                   selectedSize === size
                     ? 'border-black bg-black text-white'
                     : 'border-neutral-300 hover:border-black'

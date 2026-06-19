@@ -36,16 +36,16 @@ export function Header() {
   return (
     <>
       <header
-        className={`sticky top-0 z-50 bg-white transition-shadow ${
+        className={`sticky top-0 z-50 bg-white transition-shadow safe-x ${
           scrolled ? 'shadow-sm' : ''
         }`}
       >
         <div className="border-b border-neutral-200">
-          <div className="max-w-[1400px] mx-auto px-4 lg:px-8">
-            <div className="flex items-center justify-between h-16 lg:h-20">
+          <div className="max-w-[1400px] mx-auto px-0 sm:px-2 lg:px-4">
+            <div className="flex items-center justify-between h-14 sm:h-16 md:h-20">
               <button
                 onClick={() => setMenuOpen(true)}
-                className="lg:hidden p-2 -ml-2"
+                className="md:hidden touch-target -ml-1"
                 aria-label="Menu"
               >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -53,7 +53,7 @@ export function Header() {
                 </svg>
               </button>
 
-              <nav className="hidden lg:flex items-center gap-8">
+              <nav className="hidden md:flex items-center gap-5 lg:gap-8">
                 <Link
                   href="/"
                   className={`text-sm tracking-wide link-underline ${
@@ -103,15 +103,15 @@ export function Header() {
 
               <Link
                 href="/"
-                className="absolute left-1/2 -translate-x-1/2 text-lg lg:text-xl font-semibold tracking-[0.2em] uppercase"
+                className="absolute left-1/2 -translate-x-1/2 text-sm sm:text-base md:text-lg lg:text-xl font-semibold tracking-[0.12em] sm:tracking-[0.2em] uppercase max-w-[40vw] truncate text-center"
               >
                 elSaco
               </Link>
 
-              <div className="flex items-center gap-3 lg:gap-5">
+              <div className="flex items-center gap-1 sm:gap-3 lg:gap-5">
                 <button
                   onClick={() => setSearchOpen(true)}
-                  className="p-2 hover:opacity-70 transition-opacity"
+                  className="touch-target hover:opacity-70 transition-opacity"
                   aria-label="Search"
                 >
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -122,7 +122,7 @@ export function Header() {
 
                 <Link
                   href={user ? '/account' : '/account/login'}
-                  className="p-2 hover:opacity-70 transition-opacity hidden sm:block"
+                  className="touch-target hover:opacity-70 transition-opacity"
                   aria-label="Account"
                 >
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -133,7 +133,7 @@ export function Header() {
 
                 <button
                   onClick={() => setCartOpen(true)}
-                  className="p-2 hover:opacity-70 transition-opacity relative"
+                  className="touch-target hover:opacity-70 transition-opacity relative"
                   aria-label="Cart"
                 >
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -147,7 +147,7 @@ export function Header() {
                     <circle cx="15" cy="17" r="1.5" fill="currentColor" />
                   </svg>
                   {itemCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-black text-white text-2xs flex items-center justify-center rounded-full">
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-black text-white text-2xs flex items-center justify-center rounded-full">
                       {itemCount}
                     </span>
                   )}
